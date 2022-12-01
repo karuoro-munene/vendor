@@ -1,10 +1,12 @@
-
+from datetime import timedelta
 from pathlib import Path
+
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-==a(@w*$hf1kv*x%ig%tb-o3!zixmi_vwyn!td^u*a)v26ij%c'
-DEBUG = True
+SECRET_KEY = config("SECRET_KEY")
+DEBUG = config("DEBUG")
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -14,10 +16,50 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.humanize',
     'machine.apps.MachineConfig',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'knox',
+    'corsheaders'
 ]
+SITE_ID = int(config("SITE_ID"))
 
+REST_KNOX = {
+    "SECURE_HASH_ALGORITHM": "cryptography.hazmat.primitives.hashes.SHA512",
+    "AUTH_TOKEN_CHARACTER_LENGTH": 64,
+    "TOKEN_TLL": timedelta(hours=10),
+    "USER_SERIALIZER": "users.serializers.AccountSerializer",
+    "AUTO_REFRESH": True,
+    "TOKEN_LIMIT_PER_USER": None,
+}
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'access-control-allow-origin',
+    'access-control-allow-methods',
+    'allow'
+)
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,7 +117,7 @@ TIME_ZONE = 'Africa/Nairobi'
 USE_I18N = True
 USE_TZ = True
 
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "machine.User"
 CURRENT_SITE = config("CURRENT_SITE")
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
