@@ -30,7 +30,7 @@ REST_KNOX = {
     "SECURE_HASH_ALGORITHM": "cryptography.hazmat.primitives.hashes.SHA512",
     "AUTH_TOKEN_CHARACTER_LENGTH": 64,
     "TOKEN_TLL": timedelta(hours=10),
-    "USER_SERIALIZER": "users.serializers.AccountSerializer",
+    "USER_SERIALIZER": "machine.serializers.AccountSerializer",
     "AUTO_REFRESH": True,
     "TOKEN_LIMIT_PER_USER": None,
 }
